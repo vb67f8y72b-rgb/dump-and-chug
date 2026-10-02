@@ -119,6 +119,9 @@ document.getElementById("count").textContent=`${players.length+1} joueurs`;
 .player.gk .jn{color:var(--ball)}
 .player.gk .meta{color:rgba(251,247,234,.75)}
 
+.plink{color:inherit;text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:3px;text-decoration-thickness:1.5px}
+.plink:hover{text-decoration-color:var(--ball)}
+.plink:focus-visible{outline:2px solid var(--ball);outline-offset:2px;border-radius:2px}
 footer{font-size:.84rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 footer a{color:var(--ink)}
 
@@ -194,22 +197,23 @@ const games=[
   {d:"2026-10-09",t:"19:00",opp:"Les Jambons",surf:"#6 Club Piscine Sherbrooke (intérieure)"}
 ];
 const players=[
-  {name:"Dylan Sauvageau",no:97,cote:"C3",mj:2,b:2,a:2,pun:2,from:"Québec"},
-  {name:"Laurie Billette",no:87,cote:"F5",mj:2,b:4,a:0,pun:4,from:"St-Anicet"},
-  {name:"Hugo Smith",no:59,cote:"C4",mj:2,b:3,a:1,pun:2,from:"St-Jean"},
-  {name:"Justin Lemaire",no:13,cote:"C2",mj:2,b:1,a:2,pun:0,from:"Boucherville",alt:true},
-  {name:"Félix-Antoine Bourdon",no:10,cote:"C4",mj:2,b:2,a:1,pun:6,from:"Sherbrooke"},
-  {name:"Loïc Bouchard",no:19,cote:"C3",mj:2,b:2,a:0,pun:2,from:"Sherbrooke"},
-  {name:"Maxime Durette",no:26,cote:"C3",mj:1,b:0,a:1,pun:0,from:"Sherbrooke"},
-  {name:"Émile Pepin",no:59,cote:"C4",mj:2,b:0,a:1,pun:2,from:"St-Jean-sur-Richelieu"},
-  {name:"Léane Tourigny",no:98,cote:"F6",mj:2,b:0,a:1,pun:0,from:"Drummondville"},
-  {name:"Danika Blanchard",no:11,cote:"F5",mj:2,b:0,a:0,pun:0,from:"Sherbrooke"}
+  {name:"Dylan Sauvageau",id:81531,no:97,cote:"C3",mj:2,b:2,a:2,pun:2,from:"Québec"},
+  {name:"Laurie Billette",id:169004,no:87,cote:"F5",mj:2,b:4,a:0,pun:4,from:"St-Anicet"},
+  {name:"Hugo Smith",id:180612,no:59,cote:"C4",mj:2,b:3,a:1,pun:2,from:"St-Jean"},
+  {name:"Justin Lemaire",id:172472,no:13,cote:"C2",mj:2,b:1,a:2,pun:0,from:"Boucherville",alt:true},
+  {name:"Félix-Antoine Bourdon",id:215546,no:10,cote:"C4",mj:2,b:2,a:1,pun:6,from:"Sherbrooke"},
+  {name:"Loïc Bouchard",id:90615,no:19,cote:"C3",mj:2,b:2,a:0,pun:2,from:"Sherbrooke"},
+  {name:"Maxime Durette",id:173447,no:26,cote:"C3",mj:1,b:0,a:1,pun:0,from:"Sherbrooke"},
+  {name:"Émile Pepin",id:215547,no:59,cote:"C4",mj:2,b:0,a:1,pun:2,from:"St-Jean-sur-Richelieu"},
+  {name:"Léane Tourigny",id:161148,no:98,cote:"F6",mj:2,b:0,a:1,pun:0,from:"Drummondville"},
+  {name:"Danika Blanchard",id:157962,no:11,cote:"F5",mj:2,b:0,a:0,pun:0,from:"Sherbrooke"}
 ].map(p=>({...p,p:p.b+p.a,pp:(p.b+p.a)/p.mj}));
-const goalie={name:"Cedrick St-Laurent",no:69,cote:"D1",from:"Sherbrooke",mj:2,v:0,d:2,n:0,tc:96,arr:77,bc:19};
+const goalie={name:"Cedrick St-Laurent",id:120067,no:69,cote:"D1",from:"Sherbrooke",mj:2,v:0,d:2,n:0,tc:96,arr:77,bc:19};
 
 /* === FIN DONNÉES ÉQUIPE === */
 const mois=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
 const jours=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+const prof=p=>p.id?`<a class="plink" href="https://www.nbhpa.com/joueur-nbhpa/${p.id}/" target="_blank" rel="noopener">${p.name}</a>`:p.name;
 const fmtMin=m=>m?`${m}:00`:"–";
 const dt=g=>new Date(`${g.d}T${g.t}:00-04:00`);
 
@@ -252,7 +256,7 @@ document.getElementById("games").innerHTML=games.map(g=>{
 /* Goalie */
 {
   const g=goalie, pct=g.tc?(g.arr/g.tc):0, moy=g.mj?(g.bc/g.mj):0;
-  document.getElementById("goalie-label").textContent=`Gardien · ${g.name}`;
+  document.getElementById("goalie-label").innerHTML=`Gardien · ${prof(g)}`;
   document.getElementById("goalie").innerHTML=[
     [g.mj,"Matchs"],[`${g.v}-${g.d}-${g.n}`,"Fiche"],[`${g.arr}/${g.tc}`,"Arrêts"],
     [pct.toFixed(3).replace(/^0/,"").replace(".",","),"% arrêts"],[moy.toFixed(2).replace(".",","),"Moyenne"]
@@ -270,7 +274,7 @@ function render(){
     return dir*(x[sortK]-y[sortK]) || (y.p-x.p) || (y.b-x.b);
   });
   tbody.innerHTML=rows.map(p=>`<tr>
-    <td><span class="cote">${p.cote}</span>${p.name}</td>
+    <td><span class="cote">${p.cote}</span>${prof(p)}</td>
     <td>${p.mj}</td><td>${p.b}</td><td>${p.a}</td><td class="p">${p.p}</td>
     <td>${fmtMin(p.pun)}</td><td>${p.pp.toFixed(2).replace(".",",")}</td></tr>`).join("");
   document.querySelectorAll("#stats-table th").forEach(th=>{
@@ -288,9 +292,9 @@ render();
 document.getElementById("count").textContent=`${players.length+1} joueurs`;
 const roster=[...players].sort((x,y)=>x.no-y.no || x.name.localeCompare(y.name,"fr"));
 document.getElementById("roster").innerHTML=roster.map(p=>`<div class="player">
-  <span class="jn num">${p.no}</span><span class="nm">${p.name}${p.alt?" (A)":""}</span>
+  <span class="jn num">${p.no}</span><span class="nm">${prof(p)}${p.alt?" (A)":""}</span>
   <span class="meta">Cote ${p.cote} · ${p.from}</span></div>`).join("")+
-  `<div class="player gk"><span class="jn num">${goalie.no}</span><span class="nm">${goalie.name}</span>
+  `<div class="player gk"><span class="jn num">${goalie.no}</span><span class="nm">${prof(goalie)}</span>
   <span class="meta">Gardien · Cote ${goalie.cote} · ${goalie.from}</span></div>`;
 </script>
 
