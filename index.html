@@ -109,7 +109,7 @@ td.p{font-weight:600}
 .note{font-size:.86rem;color:var(--muted);margin:0}
 
 /* Roster */
-document.getElementById("count").textContent=`${players.length+1} joueurs`;
+document.getElementById("count").textContent=`${players.filter(p=>!p.sub).length+1} joueurs`;
 .roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .player{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .player .jn{font-family:var(--display);font-weight:900;font-size:2.4rem;line-height:1;color:var(--accent-ink)}
@@ -122,6 +122,7 @@ document.getElementById("count").textContent=`${players.length+1} joueurs`;
 .plink{color:inherit;text-decoration:underline;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:3px;text-decoration-thickness:1.5px}
 .plink:hover{text-decoration-color:var(--ball)}
 .plink:focus-visible{outline:2px solid var(--ball);outline-offset:2px;border-radius:2px}
+.sub{font-family:var(--cond);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-left:4px}
 footer{font-size:.84rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 footer a{color:var(--ink)}
 
@@ -188,28 +189,28 @@ footer a{color:var(--ink)}
 
 <script>
 /* === DONNÉES ÉQUIPE (mises à jour automatiquement) === */
-const UPDATED="2026-10-02";
+const UPDATED="2026-10-04";
 const games=[
-  {d:"2026-09-20",t:"21:00",home:false,opp:"GDX",surf:"#3 AMR Assurances Multi-risques",us:5,them:10},
-  {d:"2026-09-27",t:"17:00",home:false,away:true,opp:"Psychocats",surf:"#6 Club Piscine Sherbrooke (intérieure)",us:9,them:11},
-  {d:"2026-10-02",t:"20:00",opp:"Rhum And Puck",surf:"#3 AMR Assurances Multi-risques"},
+  {d:"2026-09-20",t:"21:00",opp:"GDX",surf:"#3 AMR Assurances Multi-risques",us:5,them:10},
+  {d:"2026-09-27",t:"17:00",away:true,opp:"Psychocats",surf:"#6 Club Piscine Sherbrooke (intérieure)",us:9,them:11},
+  {d:"2026-10-02",t:"20:00",opp:"Rhum And Puck",surf:"#3 AMR Assurances Multi-risques",us:4,them:13},
   {d:"2026-10-04",t:"17:00",away:true,opp:"Dick Machine",surf:"#2"},
   {d:"2026-10-09",t:"19:00",opp:"Les Jambons",surf:"#6 Club Piscine Sherbrooke (intérieure)"}
 ];
 const players=[
-  {name:"Dylan Sauvageau",id:81531,no:97,cote:"C3",mj:2,b:2,a:2,pun:2,from:"Québec"},
+  {name:"Justin Lemaire",id:172472,no:13,cote:"C2",mj:3,b:2,a:3,pun:0,from:"Boucherville",alt:true},
+  {name:"Dylan Sauvageau",id:81531,no:97,cote:"C3",mj:3,b:3,a:2,pun:2,from:"Québec"},
+  {name:"Hugo Smith",id:180612,no:59,cote:"C4",mj:3,b:3,a:2,pun:2,from:"St-Jean"},
   {name:"Laurie Billette",id:169004,no:87,cote:"F5",mj:2,b:4,a:0,pun:4,from:"St-Anicet"},
-  {name:"Hugo Smith",id:180612,no:59,cote:"C4",mj:2,b:3,a:1,pun:2,from:"St-Jean"},
-  {name:"Justin Lemaire",id:172472,no:13,cote:"C2",mj:2,b:1,a:2,pun:0,from:"Boucherville",alt:true},
-  {name:"Félix-Antoine Bourdon",id:215546,no:10,cote:"C4",mj:2,b:2,a:1,pun:6,from:"Sherbrooke"},
-  {name:"Loïc Bouchard",id:90615,no:19,cote:"C3",mj:2,b:2,a:0,pun:2,from:"Sherbrooke"},
-  {name:"Maxime Durette",id:173447,no:26,cote:"C3",mj:1,b:0,a:1,pun:0,from:"Sherbrooke"},
-  {name:"Émile Pepin",id:215547,no:59,cote:"C4",mj:2,b:0,a:1,pun:2,from:"St-Jean-sur-Richelieu"},
+  {name:"Loïc Bouchard",id:90615,no:19,cote:"C3",mj:3,b:2,a:1,pun:2,from:"Sherbrooke"},
+  {name:"Félix-Antoine Bourdon",id:215546,no:10,cote:"C4",mj:3,b:2,a:1,pun:6,from:"Sherbrooke"},
+  {name:"Noémie Thibodeau",id:63634,cote:"F5",mj:1,b:2,a:0,pun:0,sub:true},
+  {name:"Maxime Durette",id:173447,no:26,cote:"C3",mj:2,b:0,a:1,pun:0,from:"Sherbrooke"},
+  {name:"Émile Pepin",id:215547,no:59,cote:"C4",mj:3,b:0,a:1,pun:2,from:"St-Jean-sur-Richelieu"},
   {name:"Léane Tourigny",id:161148,no:98,cote:"F6",mj:2,b:0,a:1,pun:0,from:"Drummondville"},
-  {name:"Danika Blanchard",id:157962,no:11,cote:"F5",mj:2,b:0,a:0,pun:0,from:"Sherbrooke"}
+  {name:"Danika Blanchard",id:157962,no:11,cote:"F5",mj:3,b:0,a:0,pun:0,from:"Sherbrooke"}
 ].map(p=>({...p,p:p.b+p.a,pp:(p.b+p.a)/p.mj}));
-const goalie={name:"Cedrick St-Laurent",id:120067,no:69,cote:"D1",from:"Sherbrooke",mj:2,v:0,d:2,n:0,tc:96,arr:77,bc:19};
-
+const goalie={name:"Cedrick St-Laurent",id:120067,no:69,cote:"D1",from:"Sherbrooke",mj:3,v:0,d:3,n:0,tc:134,arr:102,bc:32};
 /* === FIN DONNÉES ÉQUIPE === */
 const mois=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
 const jours=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
@@ -274,7 +275,7 @@ function render(){
     return dir*(x[sortK]-y[sortK]) || (y.p-x.p) || (y.b-x.b);
   });
   tbody.innerHTML=rows.map(p=>`<tr>
-    <td><span class="cote">${p.cote}</span>${prof(p)}</td>
+    <td><span class="cote">${p.cote}</span>${prof(p)}${p.sub?' <span class="sub">remplaçante</span>':""}</td>
     <td>${p.mj}</td><td>${p.b}</td><td>${p.a}</td><td class="p">${p.p}</td>
     <td>${fmtMin(p.pun)}</td><td>${p.pp.toFixed(2).replace(".",",")}</td></tr>`).join("");
   document.querySelectorAll("#stats-table th").forEach(th=>{
@@ -289,8 +290,8 @@ document.querySelectorAll("#stats-table th button").forEach(b=>b.addEventListene
 render();
 
 /* Roster */
-document.getElementById("count").textContent=`${players.length+1} joueurs`;
-const roster=[...players].sort((x,y)=>x.no-y.no || x.name.localeCompare(y.name,"fr"));
+document.getElementById("count").textContent=`${players.filter(p=>!p.sub).length+1} joueurs`;
+const roster=players.filter(p=>!p.sub).sort((x,y)=>x.no-y.no || x.name.localeCompare(y.name,"fr"));
 document.getElementById("roster").innerHTML=roster.map(p=>`<div class="player">
   <span class="jn num">${p.no}</span><span class="nm">${prof(p)}${p.alt?" (A)":""}</span>
   <span class="meta">Cote ${p.cote} · ${p.from}</span></div>`).join("")+
