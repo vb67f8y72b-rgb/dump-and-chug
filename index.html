@@ -174,6 +174,7 @@ footer a{color:var(--ink)}
     </div>
     <div class="eyebrow" id="goalie-label">Gardien</div>
     <div class="goalie" id="goalie"></div>
+    <p class="note" id="sub-goalies"></p>
   </section>
 
   <section id="alignement">
@@ -189,35 +190,45 @@ footer a{color:var(--ink)}
 
 <script>
 /* === DONNÉES ÉQUIPE (mises à jour automatiquement) === */
-const UPDATED="2026-10-08";
+const UPDATED="2026-11-02";
 const games=[
   {d:"2026-09-20",t:"21:00",opp:"GDX",surf:"#3 AMR Assurances Multi-risques",us:5,them:10},
   {d:"2026-09-27",t:"17:00",away:true,opp:"Psychocats",surf:"#6 Club Piscine Sherbrooke (intérieure)",us:9,them:11},
   {d:"2026-10-02",t:"20:00",opp:"Rhum And Puck",surf:"#3 AMR Assurances Multi-risques",us:4,them:13},
   {d:"2026-10-04",t:"17:00",away:true,opp:"Dick Machine",surf:"#2",us:3,them:18},
-  {d:"2026-10-09",t:"19:00",opp:"Les Jambons",surf:"#6 Club Piscine Sherbrooke (intérieure)"},
-  {d:"2026-10-11",t:"20:00",away:true,opp:"Boombaclap M5",surf:"#3 AMR Assurances Multi-risques"},
-  {d:"2026-10-13",t:"18:00",opp:"Les Gros Minets",surf:"#6 Club Piscine Sherbrooke (intérieure)"},
-  {d:"2026-10-18",t:"21:00",away:true,opp:"Les Jambons",surf:"#2"},
-  {d:"2026-10-19",t:"21:00",away:true,opp:"Cow-Boys Alcooliques M5",surf:"#3 AMR Assurances Multi-risques"},
-  {d:"2026-10-30",t:"21:00",opp:"Nordiques M6+",surf:"#2"},
+  {d:"2026-10-09",t:"19:00",opp:"Les Jambons",surf:"#6 Club Piscine Sherbrooke (intérieure)",us:3,them:10},
+  {d:"2026-10-11",t:"20:00",away:true,opp:"Boombaclap M5",surf:"#7 EMPIRE (intérieure)",us:5,them:9},
+  {d:"2026-10-13",t:"18:00",opp:"Les Gros Minets",surf:"#6 Club Piscine Sherbrooke (intérieure)",us:8,them:9,so:true},
+  {d:"2026-10-18",t:"21:00",away:true,opp:"Les Jambons",surf:"#2",us:5,them:13},
+  {d:"2026-10-19",t:"21:00",away:true,opp:"Cow-Boys Alcooliques M5",surf:"#3 AMR Assurances Multi-risques",us:3,them:18},
+  {d:"2026-10-30",t:"21:00",opp:"Nordiques M6+",surf:"#1 Portes et Moulures Dépôt",us:8,them:4},
   {d:"2026-11-07",t:"10:00",away:true,opp:"Kany-Balles",surf:"#6 Club Piscine Sherbrooke (intérieure)"},
   {d:"2026-11-20",t:"18:55",opp:"GDMaisons",surf:"#7 EMPIRE (intérieure)"}
 ];
 const players=[
-  {name:"Dylan Sauvageau",id:81531,no:97,cote:"C3",mj:4,b:5,a:3,pun:2,from:"Québec"},
-  {name:"Hugo Smith",id:180612,no:59,cote:"C4",mj:4,b:4,a:2,pun:2,from:"St-Jean"},
-  {name:"Justin Lemaire",id:172472,no:13,cote:"C2",mj:3,b:2,a:3,pun:0,from:"Boucherville",alt:true},
-  {name:"Laurie Billette",id:169004,no:87,cote:"F5",mj:3,b:4,a:0,pun:4,from:"St-Anicet"},
-  {name:"Loïc Bouchard",id:90615,no:19,cote:"C3",mj:4,b:2,a:1,pun:4,from:"Sherbrooke"},
-  {name:"Félix-Antoine Bourdon",id:215546,no:10,cote:"C4",mj:4,b:2,a:1,pun:6,from:"Sherbrooke"},
-  {name:"Noémie Thibodeau",id:63634,cote:"F5",mj:1,b:2,a:0,pun:0,sub:true},
-  {name:"Émile Pepin",id:215547,no:59,cote:"C4",mj:4,b:0,a:2,pun:2,from:"St-Jean-sur-Richelieu"},
-  {name:"Danika Blanchard",id:157962,no:11,cote:"F5",mj:4,b:0,a:1,pun:0,from:"Sherbrooke"},
+  {name:"Dylan Sauvageau",id:81531,no:97,cote:"C3",mj:8,b:11,a:12,pun:2,from:"Québec"},
+  {name:"Justin Lemaire",id:172472,no:13,cote:"C2",mj:7,b:12,a:8,pun:2,from:"Boucherville",alt:true},
+  {name:"Noémie Thibodeau",id:63634,cote:"F5",mj:3,b:8,a:1,pun:0,sub:true},
+  {name:"Danika Blanchard",id:157962,no:11,cote:"F5",mj:7,b:2,a:4,pun:0,from:"Sherbrooke"},
+  {name:"Hugo Smith",id:180612,no:59,cote:"C4",mj:6,b:4,a:2,pun:2,from:"St-Jean"},
+  {name:"Émile Pepin",id:215547,no:59,cote:"C4",mj:8,b:1,a:4,pun:4,from:"St-Jean-sur-Richelieu"},
+  {name:"Laurie Billette",id:169004,no:16,cote:"F5",mj:7,b:4,a:1,pun:10,from:"St-Anicet"},
+  {name:"Justin Poirier",cote:"C4",mj:1,b:4,a:0,pun:2,sub:true},
+  {name:"Loïc Bouchard",id:90615,no:47,cote:"C3",mj:6,b:2,a:1,pun:4,from:"Sherbrooke"},
+  {name:"Félix-Antoine Bourdon",id:215546,no:10,cote:"C4",mj:5,b:2,a:1,pun:8,from:"Sherbrooke"},
+  {name:"Felix Michaud",cote:"C3",mj:3,b:1,a:2,pun:0,sub:true},
+  {name:"Tristan Guillot",id:133758,cote:"C4",mj:1,b:1,a:1,pun:0,sub:true},
+  {name:"Éli Poulin",id:143936,cote:"C3",mj:1,b:1,a:0,pun:2,sub:true},
   {name:"Maxime Durette",id:173447,no:26,cote:"C3",mj:3,b:0,a:1,pun:0,from:"Sherbrooke"},
-  {name:"Léane Tourigny",id:161148,no:98,cote:"F6",mj:3,b:0,a:1,pun:0,from:"Drummondville"}
+  {name:"Léane Tourigny",id:161148,no:98,cote:"F6",mj:6,b:0,a:1,pun:6,from:"Drummondville"},
+  {name:"Violette Blanchet",cote:"F6",mj:1,b:0,a:0,pun:0,sub:true},
+  {name:"Felix Mathieu",cote:"C2",mj:1,b:0,a:0,pun:0,sub:true}
 ].map(p=>({...p,p:p.b+p.a,pp:(p.b+p.a)/p.mj}));
-const goalie={name:"Cedrick St-Laurent",id:120067,no:69,cote:"D1",from:"Sherbrooke",mj:4,v:0,d:4,n:0,tc:178,arr:128,bc:50};
+const goalie={name:"Cedrick St-Laurent",id:120067,no:69,cote:"D1",from:"Sherbrooke",mj:8,v:1,d:6,n:1,tc:339,arr:246,bc:93};
+const subGoalies=[
+  {name:"Jeremy Chamberland Garceau",cote:"C4",mj:1,v:0,d:1,n:0,tc:56,arr:47,bc:9},
+  {name:"Simon Vandal",cote:"D1",mj:1,v:0,d:1,n:0,tc:42,arr:32,bc:10}
+];
 /* === FIN DONNÉES ÉQUIPE === */
 const mois=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
 const jours=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
@@ -227,7 +238,7 @@ const dt=g=>new Date(`${g.d}T${g.t}:00-04:00`);
 
 /* Board */
 const played=games.filter(g=>g.us!=null);
-const W=played.filter(g=>g.us>g.them).length, L=played.filter(g=>g.us<g.them).length, N=played.filter(g=>g.us===g.them).length;
+const W=played.filter(g=>g.us>g.them).length, L=played.filter(g=>g.us<g.them&&!g.so).length, N=played.filter(g=>g.us===g.them||(g.so&&g.us<g.them)).length;
 const bf=played.reduce((s,g)=>s+g.us,0), ba=played.reduce((s,g)=>s+g.them,0);
 document.getElementById("board").innerHTML=[
   [`${W}-${L}-${N}`,"Fiche"],[bf,"Buts pour"],[ba,"Buts contre"],[(bf-ba>0?"+":"")+(bf-ba),"Différentiel"]
@@ -253,7 +264,7 @@ if(nextG){
 document.getElementById("games").innerHTML=games.map(g=>{
   const d=dt(g);
   let res;
-  if(g.us!=null){const r=g.us>g.them?"W":g.us<g.them?"L":"T";res=`<span class="num">${g.us}-${g.them}</span><span class="pill ${r==="T"?"up":r}">${r==="W"?"V":r==="L"?"D":"N"}</span>`}
+  if(g.us!=null){const r=g.us>g.them?"W":g.us<g.them?"L":"T";res=`<span class="num">${g.us}-${g.them}</span><span class="pill ${r==="T"?"up":r}">${r==="W"?(g.so?"VF":"V"):r==="L"?(g.so?"DF":"D"):"N"}</span>`}
   else res=`<span class="pill up">${g===nextG?"Prochain":"À venir"}</span>`;
   return `<div class="game${g===nextG?" is-next":""}">
     <div class="date"><b class="num">${d.getDate()} ${mois[d.getMonth()]}</b><span>${jours[d.getDay()]} · ${g.t.replace(":","h")}</span></div>
@@ -269,6 +280,9 @@ document.getElementById("games").innerHTML=games.map(g=>{
     [g.mj,"Matchs"],[`${g.v}-${g.d}-${g.n}`,"Fiche"],[`${g.arr}/${g.tc}`,"Arrêts"],
     [pct.toFixed(3).replace(/^0/,"").replace(".",","),"% arrêts"],[moy.toFixed(2).replace(".",","),"Moyenne"]
   ].map(([v,l])=>`<div class="g"><b class="num">${v}</b><small>${l}</small></div>`).join("");
+  const sg=(typeof subGoalies!=="undefined"?subGoalies:[]);
+  const sgEl=document.getElementById("sub-goalies");
+  if(sgEl){ if(sg.length){sgEl.innerHTML="Gardiens remplaçants : "+sg.map(x=>`${prof(x)} (${x.mj} PJ, ${x.arr}/${x.tc}, ${(x.arr/x.tc).toFixed(3).replace(/^0/,"").replace(".",",")})`).join(" · ");} else sgEl.hidden=true; }
   const u=new Date(UPDATED+"T12:00:00");
   document.getElementById("updated").textContent=`Données tirées de la fiche officielle NBHPA, à jour le ${u.getDate()} ${mois[u.getMonth()]} ${u.getFullYear()}.`;
 }
@@ -282,7 +296,7 @@ function render(){
     return dir*(x[sortK]-y[sortK]) || (y.p-x.p) || (y.b-x.b);
   });
   tbody.innerHTML=rows.map(p=>`<tr>
-    <td><span class="cote">${p.cote}</span>${prof(p)}${p.sub?' <span class="sub">remplaçante</span>':""}</td>
+    <td><span class="cote">${p.cote}</span>${prof(p)}${p.sub?' <span class="sub">remplaçant·e</span>':""}</td>
     <td>${p.mj}</td><td>${p.b}</td><td>${p.a}</td><td class="p">${p.p}</td>
     <td>${fmtMin(p.pun)}</td><td>${p.pp.toFixed(2).replace(".",",")}</td></tr>`).join("");
   document.querySelectorAll("#stats-table th").forEach(th=>{
